@@ -5,9 +5,9 @@ class Collection {
        collectionModel.getData();
     };
 
-    showDate(res) {
+    async showDate(res) {
         res.status(200);
-        res.json(collectionModel.showDate(res));
+        res.json(await collectionModel.showDate(res));
     }
 }
 
