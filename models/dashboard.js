@@ -1,19 +1,30 @@
-const knexDb = require('../knex');
+const models = require('../modelsDB/models');
+const {Op} = require('sequelize');
 
 class DashboardModel {
-    getInfo(req, res) {
+    async getInfo(req, res) {
         let nowDay = new Date();
         let endDay = new Date(nowDay.getFullYear(), nowDay.getMonth(), nowDay.getDate(), 23, 59, 59, 0);
 
-        knexDb('todo')
-        .select('title', knexDb.raw('COUNT(*)'))
-        .rightJoin('lists', 'lists.id', 'todo.listid')
-        .where('done', false)
-        .whereBetween('due_date', [nowDay, endDay])
-        .groupBy('lists.title')
-        .then((data) => {
-            res.json(data)
-        })
+        res.json(await models.Todos_list.findAndCountAll({
+            attributes: ['title'],
+            include: [
+                { 
+                   model: models.Todos,
+                   where: {
+                       due_date: {
+                           [Op.between]: [nowDay, endDay]
+                       }
+                    },
+                   attributes: ['task'], 
+                   required: true,
+                   
+                }
+            ],
+            
+          })
+          )
+
     }
 }
 

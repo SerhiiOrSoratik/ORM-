@@ -6,7 +6,8 @@ class Collection {
     };
 
     showDate(res) {
-        collectionModel.showDate(res);
+        res.status(200);
+        res.json(collectionModel.showDate(res));
     }
 }
 
