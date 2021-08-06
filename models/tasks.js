@@ -1,106 +1,51 @@
 const knexDb = require('../knex');
+const models = require('../modelsDB/models')
 
 class TaskModel {
 
-    createTask (req, res) {
-        const {listid, task, done, due_date} = req.body;
-        knexDb('todo').insert({listid: listid, task: task, done: done, due_date: due_date}, "*")
-        .catch((err) => {
-            res.json(err);
-        })
-        .then((data) => {
-            res.status(201);
-            res.json(data);
+    async createTask (task, done, due_date, todosListId) {  
+       return await models.Todos.create({task, done, due_date, todosListId});
+    }
+
+    async getTask (id) {
+        const task = await models.Todos.findAll({
+            where: { id: id }
         });
+        return task;
     }
 
-    getTask (req, res) {
-        knexDb("todo")
-        .where('id', req.params.id)
-        .catch((err) => {
-           res.json(err);
+    async getTasks () {
+        const tasks = await models.Todos.findAll();
+        return tasks;
+    }
+
+    async updateTask(options, id) {
+        const tasksField = ['task', 'done', 'due_date', 'todosListId'];
+        let updatedField = {};
+
+        tasksField.forEach(elem => {
+            if (options[elem] !== undefined) {
+                updatedField[elem] = options[elem];
+            }
         })
-        .then((data) => {
-            res.status(200);
-            res.json(data);
+
+        await models.Todos.update(
+            updatedField,
+            {
+                where: {
+                    id: id
+                }
+            }
+        )
+        return 200;
+    }
+
+    async deleteTask(id) {
+        models.Todos.destroy({
+            where: {
+                id: id
+            }
         })
-    }
-
-    getTasks (req, res) {
-        knexDb("todo").then((data) => {
-          res.status(200);
-          res.json(data);
-        })  
-    }
-
-    updateTask(req, res) {
-        if (req.body.task && !req.body.done && !req.body.due_date) {  
-            knexDb('todo')
-            .where('id', req.params.id)
-            .update({task: req.body.task}, "*")
-            .catch((err) => {
-                res.json(err);
-            })
-            .then((data) => {
-                    res.status(200);
-                    res.json(data);
-            });
-        }
-        else if (!req.body.task && req.body.done && !req.body.due_date) {
-            knexDb('todo')
-            .where('id', req.params.id)
-            .update({done: req.body.done}, "*")
-            .catch((err) => {
-                res.json(err);
-            })
-            .then((data) => {
-                    res.status(200);
-                    res.json(data);
-            });
-        }
-        else if (!req.body.task && !req.body.done && req.body.due_date) {
-            knexDb('todo')
-            .where('id', req.params.id)
-            .update({due_date: req.body.due_date}, "8")
-            .catch((err) => {
-                res.json(err);
-            })
-            .then((data) => {
-                    res.status(200);
-                    res.json(data);
-            });
-        }
-        else {
-            res.status(400);
-            res.end('Bad request');
-        } 
-    }
-
-    putTask(req, res) {
-        const {task, done, due_date} = req.body;
-        knexDb('todo')
-            .where('id', req.params.id)
-            .update({task: task, done: done, due_date: due_date}, "*")
-            .catch((err) => {
-                res.json(err);
-            })
-            .then((data) => {
-                    res.status(201);
-                    res.json(data);
-            });
-    }
-
-    deleteTask(req, res) {
-        knexDb('todo')
-        .where('id', req.params.id) 
-        .del()
-        .catch((err) => {
-            res.json(err);
-        })
-        .then(() => {
-            res.status(200);
-            res.end();
-        });
     }
 
 }

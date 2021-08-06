@@ -3,6 +3,7 @@ const collection = require('./controllers/collection.controller');
 const sequalize = require('./sequelize');
 
 const models = require('./modelsDB/models')
+
 const start = async () => {
     try {
         await sequalize.authenticate();

@@ -1,42 +1,53 @@
 const taskModel = require('../models/tasks')
 
-const models = require('../modelsDB/models')
-
 class Tasks {
-////////////// ORM
-    async testCreate(req, res) {
-        const {title} = req.body
-        let test = await models.Todos_list.create({title})
-        res.json(test);
+    async createTask(req, res) {
+        const {task, done, due_date, todosListId} = req.body;
+        res.json(await taskModel.createTask(task, done, due_date, todosListId));
     }
 
-    async testGet(req, res) {
-        const types = await models.Todos_list.findAll();
-        res.json(types)
-    }
-///////////////////
-    createTask(req, res) {
-        taskModel.createTask(req, res);
+    async getTasks(req, res) {     
+        res.json(await taskModel.getTasks());
     }
 
-    getTasks(req, res) {
-        taskModel.getTasks(req, res)
+
+    async getTask(req, res) {
+        const id = req.params.id;
+        try {
+            res.status(200);
+            res.json(await taskModel.getTask(id));    
+        }
+        catch {
+            res.status(400);
+            res.end('Bad request');
+        }     
     }
 
-    getTask(req, res) {
-        taskModel.getTask(req, res);
+    async updateTask(req, res) {
+        const options = req.body;
+        const id = req.params.id;
+        try {
+            res.status(await taskModel.updateTask(options, id));
+            res.end('Updated')
+        }
+        catch {
+            res.status(400);
+            res.end('Bad request');
+        }
     }
 
-    updateTask(req, res) {
-        taskModel.updateTask(req, res);
-    }
-
-    putTask(req, res) {
-        taskModel.putTask(req, res);
-    }
-
-    deleteTask(req, res) {
-        taskModel.deleteTask(req, res);
+    async deleteTask(req, res) {
+        const id = req.params.id;
+        try {
+            await taskModel.deleteTask(id);
+            res.status(200);
+            res.end();
+        }
+        catch {
+            res.status(400);
+            res.end('Bad request');
+        }
+        
     }
 }
 
