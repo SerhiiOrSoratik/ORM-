@@ -1,70 +1,53 @@
-const knexDb = require('../knex');
+const models = require('../modelsDB/models')
 
 class ListModel {
 
-    createList(req, res) {
-        const {id, title} = req.body;
-        knexDb('lists').insert({id: id, title: title}, "*")
-        .catch((err) => {
-            res.json(err);
-        })
-        .then((data) => {
-            res.status(201);
-            res.json(data);
-        });
+    async createList(title) {
+        return await models.Todos_list.create({title});
     }
 
-    getLists(req, res) {
-        knexDb("lists").then((data) => {
-            res.status(200);
-            res.json(data);
-        })
+    async getLists() {
+        const lists = await models.Todos_list.findAll();
+        return lists;
     }
 
-    updateTask(req, res) {
-        knexDb('lists')
-            .where('id', req.params.id)
-            .update({title: req.body.title}, "*")
-            .catch((err) => {
-                res.json(err);
-            })
-            .then((data) => {
-                    res.status(200);
-                    res.json(data);
-            });
+    async updateTask(id, title) {
+        console.log(id, title)
+       await models.Todos_list.update(
+           { title: title },
+           { where: { id: id }}
+        )
+        return 200;
     }
 
-    deleteList(req, res) {
-        knexDb('lists')
-        .where('id', req.params.id) 
-        .del()
-        .catch((err) => {
-            res.json(err);
-        })
-        .then(() => {
-            res.status(200);
-            res.end();
+    async deleteList(id) {
+        models.Todos_list.destroy({
+            where: {
+                id: id
+            }
         })
     }
 
-    getTasks(req, res) {
-        const listid = req.params.listid;
-        const all = req.query.all;
+    async getTasks(options, res) {
+        const {todosListId, all} = options;
         if (all === 'true') {
-             knexDb("todo")
-             .where('listid', listid)
-             .then((data) => {
-                res.status(200);
-                res.json(data);
-            })
+            const tasks = await models.Todos.findAll({
+                where: {
+                    todosListId: todosListId
+                }
+            });
+            res.status(200);
+            res.json(tasks);
         }    
         else if(all === 'false') {
-             knexDb("todo")
-             .where({listid: listid, done: false})
-             .then((data) => {
-                res.status(200);
-                res.json(data);
-            })
+            const tasks = await models.Todos.findAll({
+                where: {
+                    todosListId: todosListId,
+                    done: false
+                }
+            });
+            res.status(200);
+            res.json(tasks);
         }
         else {
             res.status(400);

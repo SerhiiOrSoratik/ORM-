@@ -1,4 +1,3 @@
-const knexDb = require('../knex');
 const models = require('../modelsDB/models')
 
 class TaskModel {
@@ -41,7 +40,7 @@ class TaskModel {
     }
 
     async deleteTask(id) {
-        models.Todos.destroy({
+        await models.Todos.destroy({
             where: {
                 id: id
             }

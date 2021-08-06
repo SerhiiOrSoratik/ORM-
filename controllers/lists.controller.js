@@ -3,29 +3,52 @@ const listModel = require('../models/lists');
 
 class Lists {
     
-    createList(req, res) {
-        listModel.createList(req, res);
+    async createList(req, res) {
+        try {
+            res.status(201);
+            res.json(await listModel.createList(req.body.title));
+        }
+        catch {
+            res.status(400);
+            res.end('Bad request');
+        }
+        
     }
 
-    getLists(req, res) {
-        listModel.getLists(req, res);
+    async getLists(req, res) {
+        res.status(200);
+        res.json(await listModel.getLists(req, res));
     }
 
-    updateTask(req, res) {
-        listModel.updateTask(req, res);
+    async updateTask(req, res) {
+        try {
+            res.status(await listModel.updateTask(req.params.id, req.body.title));
+            res.end('Updated');
+        }
+        catch {
+            res.status(400);
+            res.end('Bad request');
+        }
+        
     }
 
-    deleteList(req, res) {
-        listModel.deleteList(req, res);
+    async deleteList(req, res) {
+        await listModel.deleteList(req.params.id);
+        res.status(201);
+        res.end();
     }
 
     createTask(req, res) {
-        req.body.listid = req.params.listid;
+        req.body.todosListId = req.params.listid;
         tasks.createTask(req, res);
     }
 
     getTasks(req, res) {
-       listModel.getTasks(req, res);
+       const options = {
+           todosListId: req.params.listid,
+           all: req.query.all
+       };
+       listModel.getTasks(options, res);
     }
 }
 
