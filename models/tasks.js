@@ -2,8 +2,8 @@ const models = require('../modelsDB/models')
 
 class TaskModel {
 
-    async createTask (task, done, due_date, todosListId) {  
-       return await models.Todos.create({task, done, due_date, todosListId});
+    async createTask (title, done, due_date, todosListId) {  
+       return await models.Todos.create({task: title, done, due_date, todosListId});
     }
 
     async getTask (id) {
@@ -19,7 +19,7 @@ class TaskModel {
     }
 
     async updateTask(options, id) {
-        const tasksField = ['task', 'done', 'due_date', 'todosListId'];
+        const tasksField = ['title', 'done', 'due_date', 'todosListId'];
         let updatedField = {};
 
         tasksField.forEach(elem => {

@@ -10,10 +10,9 @@ class CollectionModel {
         await models.Todos.findAll({
             where: {
                 due_date: {
-                    [Op.between]: [nowDay, endDay]
+                    [Op.lte]: endDay
                 }
              },
-            attributes: ['task'],
             include: {
                 model: models.Todos_list,
                 attributes: ['title'],

@@ -2,14 +2,13 @@ const taskModel = require('../models/tasks')
 
 class Tasks {
     async createTask(req, res) {
-        const {task, done, due_date, todosListId} = req.body;
-        res.json(await taskModel.createTask(task, done, due_date, todosListId));
+        const {title, done, due_date, todosListId} = req.body;
+        res.json(await taskModel.createTask(title, done, due_date, todosListId));
     }
 
     async getTasks(req, res) {     
         res.json(await taskModel.getTasks());
     }
-
 
     async getTask(req, res) {
         const id = req.params.id;

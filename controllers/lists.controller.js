@@ -44,6 +44,7 @@ class Lists {
     }
 
     getTasks(req, res) {
+
        const options = {
            todosListId: req.params.listid,
            all: req.query.all

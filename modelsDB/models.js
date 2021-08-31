@@ -3,7 +3,7 @@ const {DataTypes} = require('sequelize');
 
 const Todos = sequelize.define('todos', {
     id: {type: DataTypes.INTEGER, primaryKey:true, autoIncrement:true},
-    task: {type: DataTypes.STRING, allowNull: false},
+    title: {type: DataTypes.STRING, allowNull: false},
     done: {type: DataTypes.BOOLEAN, allowNull: false},
     due_date: {type: DataTypes.DATE}
 });

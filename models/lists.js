@@ -7,6 +7,7 @@ class ListModel {
     }
 
     async getLists() {
+
         const lists = await models.Todos_list.findAll();
         return lists;
     }
