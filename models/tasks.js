@@ -2,8 +2,9 @@ const models = require('../modelsDB/models')
 
 class TaskModel {
 
-    async createTask (title, done, due_date, todosListId) {  
-       return await models.Todos.create({task: title, done, due_date, todosListId});
+    async createTask (title, due_date, todosListId, description) {  
+       const done = false;
+       return await models.Todos.create({title, done, due_date, todosListId, description});
     }
 
     async getTask (id) {

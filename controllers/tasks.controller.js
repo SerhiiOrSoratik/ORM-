@@ -2,8 +2,8 @@ const taskModel = require('../models/tasks')
 
 class Tasks {
     async createTask(req, res) {
-        const {title, done, due_date, todosListId} = req.body;
-        res.json(await taskModel.createTask(title, done, due_date, todosListId));
+        const {title, due_date, todosListId, description} = req.body;
+        res.json(await taskModel.createTask(title, due_date, todosListId, description));
     }
 
     async getTasks(req, res) {     

@@ -39,7 +39,6 @@ class Lists {
     }
 
     createTask(req, res) {
-        req.body.todosListId = req.params.listid;
         tasks.createTask(req, res);
     }
 
