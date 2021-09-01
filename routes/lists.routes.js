@@ -18,7 +18,7 @@ router.delete('/:id', (req, res) => {
     lists.deleteList(req, res);
 })
 
-router.post('/:listid/tasks', (res, req) => {
+router.post('/:todosListId/tasks', (res, req) => {
     lists.createTask(res, req);
 })
 

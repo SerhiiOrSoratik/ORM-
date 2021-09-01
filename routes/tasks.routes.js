@@ -18,7 +18,7 @@ router.get('/:id', (req, res) => {
     tasks.getTask(req, res);
 });
 
-router.post('/', (req, res) => {
+router.post('/:todosListId', (req, res) => {
     tasks.createTask(req, res);
 });
 

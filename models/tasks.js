@@ -3,13 +3,15 @@ const models = require("../modelsDB/models");
 class TaskModel {
   async createTask(title, due_date, todosListId, description) {
     const done = false;
-    return await models.Todos.create({
+    const test = await models.Todos.create({
       title,
       done,
       due_date,
       todosListId,
       description,
     });
+
+    return test
   }
 
   async getTask(id) {

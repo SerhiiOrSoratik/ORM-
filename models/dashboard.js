@@ -18,12 +18,16 @@ class DashboardModel {
           },
         ],
       })
-      const countUncompletedTask = dashboardCount.rows.map(d => {
-        return {id: d.id, title: d.title, count: d.todos.length}
+      const openedTasks = {};
+      dashboardCount.rows.forEach(d => {
+        openedTasks[d.id] = d.todos.length
+      })
+      const lists = dashboardCount.rows.map(d => {
+        return {id: d.id, title: d.title}
       })
       const today = await this.getInfoToday();
 
-      res.json({today: today, lists: countUncompletedTask})
+      res.json({today, lists, openedTasks})
   }
 
   async getInfoToday() {
