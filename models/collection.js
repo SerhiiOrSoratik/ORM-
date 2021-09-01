@@ -9,8 +9,9 @@ class CollectionModel {
         let endDay = new Date(nowDay.getFullYear(), nowDay.getMonth(), nowDay.getDate(), 23, 59, 59, 0);
         await models.Todos.findAll({
             where: {
+                done: false,
                 due_date: {
-                    [Op.lte]: endDay
+                    [Op.lte]: endDay,
                 }
              },
             include: {
@@ -20,6 +21,7 @@ class CollectionModel {
         }).then(data => {
            info = data
         })
+        console.log(info)
         return  info;
     }
 }

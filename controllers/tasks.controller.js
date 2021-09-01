@@ -26,8 +26,8 @@ class Tasks {
         const options = req.body;
         const id = req.params.id;
         try {
-            res.status(await taskModel.updateTask(options, id));
-            res.end('Updated')
+            res.status(200);
+            res.json(await taskModel.updateTask(options, id))
         }
         catch {
             res.status(400);
